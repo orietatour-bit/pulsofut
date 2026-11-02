@@ -1,0 +1,70 @@
+import { useState } from 'react';
+import { Trophy, CalendarDays, Clock, Menu, X } from 'lucide-react';
+import './style.css';
+
+const partidos = [
+  { liga: 'LIGA PROFESIONAL', local: 'River Plate', visitante: 'Boca Juniors', hora: '21:00' },
+  { liga: 'PRIMERA NACIONAL', local: 'San Martín (T)', visitante: 'Colón', hora: '19:00' },
+  { liga: 'COPA ARGENTINA', local: 'Racing Club', visitante: 'Independiente', hora: '20:30' },
+];
+
+export default function App() {
+  const [pestana, setPestana] = useState('Partidos');
+  const [menu, setMenu] = useState(false);
+
+  return (
+    <main className="app">
+      <header className="header">
+        <div className="brand">
+          <span>⚽</span>
+          <div>PULSO<span>FUT</span><small>EL FÚTBOL EN TUS MANOS</small></div>
+        </div>
+        <button onClick={() => setMenu(!menu)}>{menu ? <X /> : <Menu />}</button>
+        <nav className={menu ? 'open' : ''}>
+          {['En vivo', 'Partidos', 'Resultados', 'Posiciones'].map(item => (
+            <button key={item} onClick={() => { setPestana(item); setMenu(false); }}>
+              {item}
+            </button>
+          ))}
+        </nav>
+      </header>
+
+      <section className="hero">
+        <div className="tag">● FÚTBOL ARGENTINO</div>
+        <h1>Viví el fútbol.<br /><span>Sentí la pasión.</span></h1>
+        <p>Todo el fútbol argentino en un solo lugar.</p>
+        <div className="demo">MODO DEMOSTRACIÓN · SIN DATOS EN VIVO</div>
+      </section>
+
+      <section className="content">
+        <div className="section-title">
+          <div><small>ARGENTINA · UTC-3</small><h2>{pestana}</h2></div>
+          <div><CalendarDays /> Temporada 2026</div>
+        </div>
+
+        {pestana === 'Posiciones' ? (
+          <div className="table-wrap">
+            <h3><Trophy /> TABLA DE POSICIONES</h3>
+            <p>Próximamente: posiciones oficiales.</p>
+          </div>
+        ) : (
+          <div className="matches">
+            {partidos.map((partido, i) => (
+              <article className="match" key={i}>
+                <div className="league">{partido.liga}</div>
+                <div className="match-body">
+                  <strong>{partido.local}</strong>
+                  <div className="score">VS<small>{partido.hora}</small></div>
+                  <strong>{partido.visitante}</strong>
+                </div>
+                <div className="match-foot"><Clock /> PRÓXIMAMENTE · DATOS DE EJEMPLO</div>
+              </article>
+            ))}
+          </div>
+        )}
+        <p className="notice">Los partidos mostrados son ejemplos de diseño, no información deportiva real.</p>
+      </section>
+      <footer>⚽ PULSOFUT · PASIÓN POR EL FÚTBOL ARGENTINO</footer>
+    </main>
+  );
+}
